@@ -8,7 +8,7 @@ public class ConexionBD {
        try {           
             Class.forName("com.mysql.cj.jdbc.Driver");
             cn=DriverManager.getConnection("jdbc:mysql://localhost/matriculaunfv","root","");           
-//            System.out.println("Conexion Exitosa.");            
+            System.out.println("Conexion Exitosa.");            
             
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println("Conexion Fallida.");

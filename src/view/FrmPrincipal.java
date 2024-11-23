@@ -1,45 +1,22 @@
 package view;
 
-import controller.CtrMatricula;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.*;
+
+import controller.CtrPrincipal;
+import controller.CtrMatricula;
 import controller.CtrAlumno;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import utilily.Recursos;
 
 public class FrmPrincipal extends JFrame {    
-    //DECLARACION DE ICONOS
-    ImageIcon iconoLupa = new ImageIcon(getClass().getResource("/icons/buscar.png"));
-    ImageIcon iconoadd = new ImageIcon(getClass().getResource("/icons/add.PNG"));
-    ImageIcon iconoclean = new ImageIcon(getClass().getResource("/icons/clean.png"));
-    ImageIcon iconodelete = new ImageIcon(getClass().getResource("/icons/delete.png"));
-    ImageIcon iconologout = new ImageIcon(getClass().getResource("/icons/logout.png"));
-    ImageIcon iconopencil = new ImageIcon(getClass().getResource("/icons/pencil.png"));
-    
-    //VARIABLES DE INTERNAL PANELS
-    public JInternalFrame inMenu, in1, in2, in3, in4, in5, in6, in7;
-    public JPanel paMenu, pa1, pa11, pa2, pa3, pa4, pa5, pa6, pa7;
-    
-    //VARIABLES PUBLICAS
-    Font fuente = new Font("Arial", Font.PLAIN, 24);
-    Font titulo = new Font("Arial", Font.BOLD, 24);
-    Color fondo = new Color(255, 135, 0);
-    Color letra = Color.WHITE;
     public JInternalFrame intPanel;
-    public JButton btnVolver;
-    
-    //VARIABLES DEL CONSTRUCTOR
-    public JMenuBar menuBar;
-    public JMenu menuGeneral, menuRegistro, menuBusqueda, menuOpciones;
-    public JMenuItem miPrincipal, miSalida,
-            miMatriculaPostulante, miMatriculaRegular,
-            miMatricula, miVoucher, miHistorial,
-            miModificar, miImprimir;
-    
-    public CtrAlumno objctr1;
-    public CtrMatricula objctr2;
+    public JLabel lblBienvenida;
+    Recursos r;
+    CtrPrincipal ctrmain;
+    CtrAlumno objctr1;
+    CtrMatricula objctr2;
     
     public FrmPrincipal() {        
         setSize(1250, 800);
@@ -47,250 +24,180 @@ public class FrmPrincipal extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         
+        r = new Recursos();        
+        ctrmain = new CtrPrincipal(this);
         objctr1 = new CtrAlumno(this);
         objctr2 = new CtrMatricula(this);
         
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         
-        menuGeneral = new JMenu("Principal");
-            miPrincipal = new JMenuItem("Menu Principal");
-            miPrincipal.setIcon(iconopencil);
-            miPrincipal.addActionListener((e) -> {
-                MenuPrincipal();
-            });
-            menuGeneral.add(miPrincipal);
-            
-            miSalida = new JMenuItem("Cerrar Sesión");
-            miSalida.setIcon(iconologout);
-            miSalida.addActionListener((e) -> {
-                confirmarSalida();
-            });
-            menuGeneral.add(miSalida);        
-        menuRegistro = new JMenu("Matrícula");
-            miMatriculaPostulante = new JMenuItem("Postulante");
-            miMatriculaPostulante.setIcon(iconoadd);
-            miMatriculaPostulante.addActionListener((e) -> {
-                RegistroPostulante();
-            });
-            menuRegistro.add(miMatriculaPostulante);
-            
-            miMatriculaRegular = new JMenuItem("Regular");
-            miMatriculaRegular.setIcon(iconoadd);
-            miMatriculaRegular.addActionListener((e) -> {
-                MatriculaRegular();
-            });            
-            menuRegistro.add(miMatriculaRegular);
-        menuBusqueda = new JMenu("Revisar");
-            miMatricula = new JMenuItem("Revisar Matricula");
-            miMatricula.setIcon(iconoLupa);
-            miMatricula.addActionListener((e) -> {
-                MatriculaRevisar();
-            });
-            menuBusqueda.add(miMatricula);
-            
-            miVoucher = new JMenuItem("Revisar Voucher");
-            miVoucher.setIcon(iconoLupa);
-            miVoucher.addActionListener((e) -> {
-                VoucherRevisar();
-            });
-            menuBusqueda.add(miVoucher);
-            
-            miHistorial = new JMenuItem("Revisar Historial");
-            miHistorial.setIcon(iconoLupa);
-            miHistorial.addActionListener((e) -> {
-                HistoriaRevisar();
-            });
-            menuBusqueda.add(miHistorial);      
-        menuOpciones = new JMenu("Opciones");
-            miModificar = new JMenuItem("Modificar");
-            miModificar.setIcon(iconoclean);
-            miModificar.addActionListener((e) -> {
-                ModificarDatos();
-            });
-            menuOpciones.add(miModificar);
-            
-            miImprimir = new JMenuItem("Imprimir");
-            miImprimir.setIcon(iconoclean);
-            miImprimir.addActionListener((e) -> {
-                ImprimirDatos();
-            });               
-            menuOpciones.add(miImprimir);
-            
-        menuBar.add(menuGeneral);
-        menuBar.add(menuRegistro);
-        menuBar.add(menuBusqueda);
-        menuBar.add(menuOpciones);        
+        JMenu menuGeneral = new JMenu("Principal");
+            JMenuItem miPrincipal = new JMenuItem("Menu Principal");
+            miPrincipal.setIcon(r.iconopencil);
+            menuGeneral.add(miPrincipal);       
+            JMenuItem miAjustes = new JMenuItem("Ajustes");
+            miAjustes.setIcon(r.iconoclean);
+            menuGeneral.add(miAjustes);
+            JMenuItem miSalida = new JMenuItem("Cerrar Sesión");
+            miSalida.setIcon(r.iconologout);
+            menuGeneral.add(miSalida);      
+        menuBar.add(menuGeneral);  
         
-        MenuPrincipal();
-    }        
-
-    public void volver(){          
-        intPanel.dispose();
-        intPanel = null;
-        MenuPrincipal();
-    }
-    
-    public void cerrarIntPanel(){
-        if(intPanel != null){
-            intPanel.dispose();
-            intPanel = null;
-        }
-    }    
-    
-    public void confirmarSalida(){
-        int salida = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?",
-                "Confirmación", JOptionPane.YES_NO_OPTION);
-        if(salida == JOptionPane.YES_OPTION){
-            this.dispose();
-            FrmLogin vista = new FrmLogin();
-            vista.setVisible(true);
-        }
-    }
+        JMenu menuRegistro = new JMenu("Matrícula");
+            JMenuItem miMatriculaPostulante = new JMenuItem("Postulante");
+            miMatriculaPostulante.setIcon(r.iconoadd);
+            menuRegistro.add(miMatriculaPostulante);            
+            JMenuItem miMatriculaRegular = new JMenuItem("Regular");
+            miMatriculaRegular.setIcon(r.iconoadd);        
+            menuRegistro.add(miMatriculaRegular);
+        menuBar.add(menuRegistro);
+        
+        JMenu menuBusqueda = new JMenu("Revisar");
+            JMenuItem miMatricula = new JMenuItem("Revisar Matricula");
+            miMatricula.setIcon(r.iconoLupa);
+            menuBusqueda.add(miMatricula);            
+            JMenuItem miVoucher = new JMenuItem("Revisar Voucher");
+            miVoucher.setIcon(r.iconoLupa);
+            menuBusqueda.add(miVoucher);            
+            JMenuItem miHistorial = new JMenuItem("Revisar Historial");
+            miHistorial.setIcon(r.iconoLupa);
+            menuBusqueda.add(miHistorial);     
+        menuBar.add(menuBusqueda); 
+        
+        JMenu menuOpciones = new JMenu("Opciones");
+            JMenuItem miModificar = new JMenuItem("Modificar");
+            miModificar.setIcon(r.iconoclean);            
+            menuOpciones.add(miModificar);            
+            JMenuItem miImprimir = new JMenuItem("Imprimir");
+            miImprimir.setIcon(r.iconoclean);            
+            menuOpciones.add(miImprimir);            
+        menuBar.add(menuOpciones);    
+        
+        miPrincipal.addActionListener(e -> MenuPrincipal());
+        miAjustes.addActionListener(e -> Ajustes());
+        miSalida.addActionListener(e -> ctrmain.confirmarSalida() );
+        miMatriculaPostulante.addActionListener(e -> RegistroPostulante());
+        miMatriculaRegular.addActionListener(e -> MatriculaRegular());
+        miMatricula.addActionListener(e -> MatriculaRevisar());
+        miVoucher.addActionListener(e -> VoucherRevisar());
+        miHistorial.addActionListener(e -> HistoriaRevisar());
+        miModificar.addActionListener(e -> ModificarDatos());
+        miImprimir.addActionListener(e -> ImprimirDatos());   
+    }      
         
     //------CODIGO DE INTERNAL PANELS-------------    
-    private void MenuPrincipal(){          
-        cerrarIntPanel();
-        inMenu = new JInternalFrame();
+    public void MenuPrincipal(){        
+        ctrmain.cerrarIntPanel(intPanel);
+        JInternalFrame inMenu = new JInternalFrame();
         inMenu.setBounds(-5,-30,1260, 860);
-        paMenu = new JPanel();
+        JPanel paMenu = new JPanel();
         paMenu.setLayout(null);
         paMenu.setBackground(Color.WHITE);
         
-        JLabel lblInsert = new JLabel("Matricular Estudiantes");
-        lblInsert.setBounds(530, 30, 300, 25);
-        lblInsert.setFont(fuente);
-        paMenu.add(lblInsert);
+        lblBienvenida = new JLabel();
+        lblBienvenida.setBounds(530,30,600,25);
+        lblBienvenida.setFont(r.arialXLB);
+        paMenu.add(lblBienvenida);
+        
+        JSeparator spBienvenida = new JSeparator();
+        spBienvenida.setBounds(530,60,560,15);
+        spBienvenida.setForeground(r.negro);
+        paMenu.add(spBienvenida); 
+        
+        ctrmain.bienvenida();
+        
+        JLabel lblIngresar = new JLabel("Matricular Estudiantes");
+        lblIngresar.setBounds(530, 100, 300, 25);
+        lblIngresar.setFont(r.arialL);
+        paMenu.add(lblIngresar);
 
-        JLabel lblModif = new JLabel("Modificar Matrículas");
-        lblModif.setBounds(530, 200, 300, 25);
-        lblModif.setFont(fuente);
-        paMenu.add(lblModif);
+        JLabel lblModificar = new JLabel("Modificar Matrículas");
+        lblModificar.setBounds(530, 270, 300, 25);
+        lblModificar.setFont(r.arialL);
+        paMenu.add(lblModificar);
 
-        JLabel lblSearch = new JLabel("Buscar Matrículas");
-        lblSearch.setBounds(530, 370, 300, 25);
-        lblSearch.setFont(fuente);
-        paMenu.add(lblSearch);
+        JLabel lblBuscar = new JLabel("Buscar Matrículas");
+        lblBuscar.setBounds(530, 445, 300, 25);
+        lblBuscar.setFont(r.arialL);
+        paMenu.add(lblBuscar);
 
-        JButton btnCerrarSesion = new JButton("Cerrar Sesión");
-        btnCerrarSesion.setBounds(560, 560, 120, 30);
-        btnCerrarSesion.addActionListener((e) -> {
-            confirmarSalida();
-        });
-        paMenu.add(btnCerrarSesion);
+        JButton btnCerrar = new JButton("Cerrar Sesión");
+        btnCerrar.setBounds(560, 670, 120, 30);
+        paMenu.add(btnCerrar);
 
-        JButton btnModificar = new JButton("Manual");
-        btnModificar.setBounds(810, 560, 120, 30);
-        paMenu.add(btnModificar);
+        JButton btnManual = new JButton("Manual");
+        btnManual.setBounds(1080, 670, 120, 30);
+        paMenu.add(btnManual);
 
         JButton btnMatPost = new JButton(" Postulante");
-        btnMatPost.setBounds(560, 85, 200, 80);
-        btnMatPost.setBackground(fondo);
-        btnMatPost.setForeground(letra);
-        btnMatPost.setIcon(iconoadd);
-        btnMatPost.addActionListener((e) -> {
-           RegistroPostulante();
-        });
+        btnMatPost.setBounds(560, 155, 200, 80);
+        r.btnstyle(btnMatPost);
+        btnMatPost.setIcon(r.iconoadd);
         paMenu.add(btnMatPost);
 
-        JButton btnMatEst = new JButton(" Estudiante Regular");
-        btnMatEst.setBounds(780, 85, 200, 80);
-        btnMatEst.setBackground(fondo);
-        btnMatEst.setForeground(letra);      
-        btnMatEst.setIcon(iconoadd);
-        btnMatEst.addActionListener((e) -> {
-           MatriculaRegular();
-        });
+        JButton btnMatEst = new JButton(" Estudiante");
+        btnMatEst.setBounds(780, 155, 200, 80);
+        r.btnstyle(btnMatEst);
+        btnMatEst.setIcon(r.iconoadd);
         paMenu.add(btnMatEst);
         
         JButton btnRevMat = new JButton(" Matricula");
-        btnRevMat.setBounds(560, 260, 200, 80);
-        btnRevMat.setBackground(fondo);
-        btnRevMat.setForeground(letra);
-        btnRevMat.setIcon(iconopencil);
-        btnRevMat.addActionListener((e) -> {
-           MatriculaRevisar();
-        });
+        btnRevMat.setBounds(560, 330, 200, 80);
+        r.btnstyle(btnRevMat);
+        btnRevMat.setIcon(r.iconopencil);
         paMenu.add(btnRevMat);
 
         JButton btnRevVou = new JButton(" Vouchers");
-        btnRevVou.setBounds(780, 260, 200, 80);
-        btnRevVou.setBackground(fondo);
-        btnRevVou.setForeground(letra);      
-        btnRevVou.setIcon(iconopencil);
-        btnRevVou.addActionListener((e) -> {
-            VoucherRevisar();
-        });
+        btnRevVou.setBounds(780, 330, 200, 80);
+        r.btnstyle(btnRevVou);
+        btnRevVou.setIcon(r.iconopencil);
         paMenu.add(btnRevVou);
         
         JButton btnRevHis = new JButton(" Historial");
-        btnRevHis.setBounds(1000, 260, 200, 80);
-        btnRevHis.setBackground(fondo);
-        btnRevHis.setForeground(letra);      
-        btnRevHis.setIcon(iconopencil);
-        btnRevHis.addActionListener((e) -> {
-            HistoriaRevisar();
-        });
+        btnRevHis.setBounds(1000, 330, 200, 80);
+        r.btnstyle(btnRevHis);   
+        btnRevHis.setIcon(r.iconopencil);
         paMenu.add(btnRevHis);
         
         JButton btnModDat = new JButton("Modificar Datos");
-        btnModDat.setBounds(560, 435, 200, 80);
-        btnModDat.setBackground(fondo);
-        btnModDat.setForeground(letra);      
-        btnModDat.setIcon(iconoLupa);
-        btnModDat.addActionListener((e) -> {
-            ModificarDatos();
-        });
+        btnModDat.setBounds(560, 505, 200, 80);
+        r.btnstyle(btnModDat);
+        btnModDat.setIcon(r.iconoLupa);
         paMenu.add(btnModDat);
         
         JButton btnImpDat = new JButton("Imprimir Datos");
-        btnImpDat.setBounds(780, 435, 200, 80);
-        btnImpDat.setBackground(fondo);
-        btnImpDat.setForeground(letra);      
-        btnImpDat.setIcon(iconoLupa);
-        btnImpDat.addActionListener((e) -> {
-            ImprimirDatos();
-        });
+        btnImpDat.setBounds(780, 505, 200, 80);
+        r.btnstyle(btnImpDat);   
+        btnImpDat.setIcon(r.iconoLupa);
         paMenu.add(btnImpDat);
         
-        JPanel panelBarra = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Image imagen = new ImageIcon(getClass().getResource("/image/barra_naranja.PNG")).getImage();
-                g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
+        JPanel panelBarra = r.panelBarra;
         panelBarra.setBounds(0, 790, 1440, 50);
         paMenu.add(panelBarra);
         
-        JPanel panelImagen = new JPanel() {
-        @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Image imagen = new ImageIcon(getClass().getResource("/image/unfv_fiis_local_2.png")).getImage();
-                g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-        panelImagen.setBounds(0, 0, 500, 800);
-        paMenu.add(panelImagen);
+        JPanel unfv_local2 = r.unfv_local2;
+        unfv_local2.setBounds(0, 0, 500, 800);
+        paMenu.add(unfv_local2);
 
-        JPanel panelLogo = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Image imagen = new ImageIcon(getClass().getResource("/image/unfv_fiis_logo.png")).getImage();
-                g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-        panelLogo.setBounds(1340, 20, 64, 64);
-        paMenu.add(panelLogo);  
+        JPanel unfv_fiis_logo = r.unfv_fiis_logo;
+        unfv_fiis_logo.setBounds(1340, 20, 64, 64);
+        paMenu.add(unfv_fiis_logo);  
         
         JButton btn = new JButton();       
         btn.setBounds(-20,0,10,10);
         SwingUtilities.invokeLater(() -> btn.requestFocus());
         paMenu.add(btn);  
-
+        
+        btnCerrar.addActionListener(e -> ctrmain.confirmarSalida());        
+        btnMatPost.addActionListener(e -> RegistroPostulante());        
+        btnMatEst.addActionListener(e -> MatriculaRegular());
+        btnRevMat.addActionListener(e -> MatriculaRevisar());
+        btnRevVou.addActionListener(e -> VoucherRevisar());
+        btnRevHis.addActionListener(e -> HistoriaRevisar());
+        btnModDat.addActionListener(e -> ModificarDatos());
+        btnImpDat.addActionListener(e -> ImprimirDatos());
+        
         inMenu.add(paMenu);
         inMenu.setVisible(true);
         add(inMenu);        
@@ -304,31 +211,27 @@ public class FrmPrincipal extends JFrame {
     public DefaultTableModel modelo1Tabla;
     
     public void RegistroPostulante(){           
-        cerrarIntPanel();
-        in1 = new JInternalFrame();
+        ctrmain.cerrarIntPanel(intPanel);
+        JInternalFrame in1 = new JInternalFrame();
         in1.setBounds(-5,-30,1260, 860);
-        pa1 = new JPanel();
+        JPanel pa1 = new JPanel();
         pa1.setLayout(null);
         
         JLabel lblTitulo = new JLabel("Inscripción de Alumnos");
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 30));
-        lblTitulo.setForeground(fondo);
+        lblTitulo.setFont(r.arialXLB);
+        lblTitulo.setForeground(r.naranja);
         lblTitulo.setBounds(450, 25, 400, 30);
         pa1.add(lblTitulo);
         
-        btnVolver = new JButton("Volver");
-        btnVolver.setBounds(80, 660, 100, 30);
-        pa1.add(btnVolver);
-        
         JLabel lblbloque1 = new JLabel("  ---- Rellenar Datos ----");
         lblbloque1.setFont(new Font("Arial", Font.BOLD, 24));
-        lblbloque1.setForeground(fondo);
+        lblbloque1.setForeground(r.naranja);
         lblbloque1.setBounds(80, 80, 400, 30);
         pa1.add(lblbloque1);
         
         JLabel lblbloque2 = new JLabel(" ---- Menú Opciones ----");
         lblbloque2.setFont(new Font("Arial", Font.BOLD, 24));
-        lblbloque2.setForeground(fondo);
+        lblbloque2.setForeground(r.naranja);
         lblbloque2.setBounds(80, 450, 400, 30);
         pa1.add(lblbloque2);
         
@@ -382,22 +285,22 @@ public class FrmPrincipal extends JFrame {
 
         JButton btn1Registrar = new JButton("Registrar");
         btn1Registrar.setBounds(80, 500, 125, 30);
-        btn1Registrar.setIcon(iconoadd);
+        btn1Registrar.setIcon(r.iconoadd);
         pa1.add(btn1Registrar);
         
         JButton btn1Modificar = new JButton("Modificar");
         btn1Modificar.setBounds(225, 500, 125, 30);
-        btn1Modificar.setIcon(iconopencil);
+        btn1Modificar.setIcon(r.iconopencil);
         pa1.add(btn1Modificar);
         
         JButton btn1Completar = new JButton("Llenar");
         btn1Completar.setBounds(80, 560, 125, 30);
-        btn1Completar.setIcon(iconoLupa);
+        btn1Completar.setIcon(r.iconoLupa);
         pa1.add(btn1Completar);
         
         JButton btn1Eliminar = new JButton("Eliminar");
         btn1Eliminar.setBounds(225, 560, 125, 30);
-        btn1Eliminar.setIcon(iconodelete);
+        btn1Eliminar.setIcon(r.iconodelete);
         pa1.add(btn1Eliminar);
         
         String datos[] = {"Código", "Apellidos", "Nombres", "Carrera", "DNI", "Dirección"};
@@ -420,8 +323,7 @@ public class FrmPrincipal extends JFrame {
                 }
             }
         });      
-        
-        btnVolver.addActionListener(e ->volver());        
+          
         objctr1.cargarTablaAlumnos();
         objctr1.cargarCarreras();
         btn1Registrar.addActionListener((e) -> objctr1.registrarAlumno());
@@ -429,10 +331,15 @@ public class FrmPrincipal extends JFrame {
         btn1Completar.addActionListener((e) -> objctr1.completarAlumno());
         btn1Eliminar.addActionListener((e) -> objctr1.eliminarAlumno());
         
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBounds(80, 660, 100, 30);
+        pa1.add(btnVolver);
+        
         in1.add(pa1);
         in1.setVisible(true);
         add(in1);
         intPanel = in1;
+        btnVolver.addActionListener(e -> ctrmain.volver(intPanel));
     }
     
     //---PANEL 2: ---    
@@ -444,20 +351,16 @@ public class FrmPrincipal extends JFrame {
     public  JTextField txt2CodAlumno, txt2Alumno, txt2Carrera, txt2Escuela;   
     
     public void MatriculaRegular(){          
-        cerrarIntPanel();
-        in2 = new JInternalFrame();
+        ctrmain.cerrarIntPanel(intPanel);
+        JInternalFrame in2 = new JInternalFrame();
         in2.setBounds(-5,-30,1260, 860);
-        pa2 = new JPanel();
+        JPanel pa2 = new JPanel();
         pa2.setLayout(null);
         
         JLabel lblTitulo = new JLabel("Matrícula de alumnos");
-        lblTitulo.setFont(titulo);
+        lblTitulo.setFont(r.arialXLB);
         lblTitulo.setBounds(450, 20, 400, 30);
         pa2.add(lblTitulo);
-        
-        btnVolver = new JButton("Volver");
-        btnVolver.setBounds(80, 660, 100, 30);
-        pa2.add(btnVolver);
         
         JButton btn2Buscar = new JButton("Cargar Datos de Alumno");
         btn2Buscar.setBounds(420, 70, 200, 30);
@@ -574,7 +477,6 @@ public class FrmPrincipal extends JFrame {
         scrollPane.setBounds(80, 320, 1060, 250);
         pa2.add(scrollPane);
                 
-        btnVolver.addActionListener(e ->volver());        
         objctr2.cargarAños();
         btn2Buscar.addActionListener((e) -> {
             objctr2.buscarAlumno();    
@@ -583,13 +485,19 @@ public class FrmPrincipal extends JFrame {
         cbo2Años.addActionListener(e -> objctr2.cargarCiclos());
         cbo2Ciclos.addActionListener(e -> objctr2.cargarAsignaturas());
         
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBounds(80, 660, 100, 30);
+        pa2.add(btnVolver); 
+        
         in2.add(pa2);
         in2.setVisible(true);
         add(in2);
         intPanel = in2;
+        btnVolver.addActionListener(e -> ctrmain.volver(intPanel));        
     }
-    
-   
+    public void Ajustes(){
+        
+    }
     
     //---PANEL 3: ---    
     public JLabel lbl3BuscarId, lbl3BuscarNombre;
@@ -599,23 +507,16 @@ public class FrmPrincipal extends JFrame {
     public DefaultTableModel modelo3Tabla;
     
     public void MatriculaRevisar(){       
-        cerrarIntPanel();
-        in3 = new JInternalFrame();
+        ctrmain.cerrarIntPanel(intPanel);
+        JInternalFrame in3 = new JInternalFrame();
         in3.setBounds(-5,-30,1260, 860);
-        pa3 = new JPanel();
+        JPanel pa3 = new JPanel();
         pa3.setLayout(null);
         
         JLabel lblTitulo = new JLabel("Buscar e Imprimir Matrícula");
-        lblTitulo.setFont(titulo);
+        lblTitulo.setFont(r.arialXLB);
         lblTitulo.setBounds(500, 20, 500, 40);
         pa3.add(lblTitulo);
-        
-        btnVolver = new JButton("Volver");
-        btnVolver.setBounds(80, 660, 100, 30);
-        btnVolver.addActionListener((e) -> {
-            volver();
-        });
-        pa3.add(btnVolver);
 
         lbl3BuscarId = new JLabel("Buscar por ID de Alumno:");
         lbl3BuscarId.setBounds(100, 100, 200, 30);
@@ -652,10 +553,15 @@ public class FrmPrincipal extends JFrame {
         btn3Limpiar.setBounds(700, 700, 150, 40);
         pa3.add(btn3Limpiar);
         
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBounds(80, 660, 100, 30);
+        pa3.add(btnVolver);
+        
         in3.add(pa3);
         in3.setVisible(true);
         add(in3);
         intPanel = in3;
+        btnVolver.addActionListener(e -> ctrmain.volver(intPanel));
     }
     //---PANEL 4: ---  
     public JLabel lbl4BuscarId, lbl4BuscarCiclo;
@@ -665,25 +571,18 @@ public class FrmPrincipal extends JFrame {
     public DefaultTableModel modelo4Tabla;
     public String[] titu4tabla = {"ID Voucher", "Fecha", "ID Curso", "Nombre Curso", "Monto", "Estado de Verificación"};
     
-    public void VoucherRevisar(){       
-        cerrarIntPanel();
-        in4 = new JInternalFrame();
+    public void VoucherRevisar(){   
+        ctrmain.cerrarIntPanel(intPanel);
+        JInternalFrame in4 = new JInternalFrame();
         in4.setBounds(-5,-30,1260, 860);
-        pa4 = new JPanel();
+        JPanel pa4 = new JPanel();
         pa4.setLayout(null);
         
         JLabel lblTitulo = new JLabel("Revisión de Vouchers de Pago");
-        lblTitulo.setFont(titulo);
+        lblTitulo.setFont(r.arialXLB);
         lblTitulo.setBounds(500, 20, 500, 40);
-        pa3.add(lblTitulo);
-        
-        btnVolver = new JButton("Volver");
-        btnVolver.setBounds(80, 660, 100, 30);
-        btnVolver.addActionListener((e) -> {
-            volver();
-        });
-        pa3.add(btnVolver);   
-        
+        pa4.add(lblTitulo);
+              
         lbl4BuscarId = new JLabel("Buscar por ID de Alumno:");
         lbl4BuscarId.setBounds(100, 100, 200, 30);
         pa4.add(lbl4BuscarId);
@@ -718,11 +617,15 @@ public class FrmPrincipal extends JFrame {
         btn4Limpiar.setBounds(700, 700, 150, 40);
         pa4.add(btn4Limpiar);
         
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBounds(80, 660, 100, 30);
+        pa4.add(btnVolver); 
         
         in4.add(pa4);
         in4.setVisible(true);
         add(in4);
         intPanel = in4;
+        btnVolver.addActionListener(e -> ctrmain.volver(intPanel));    
     }
     //---PANEL 5: ---  
     public JLabel lbl5BuscarId, lbl5BuscarCiclo;
@@ -733,24 +636,17 @@ public class FrmPrincipal extends JFrame {
     public String[] titu5tabla = {"ID Alumno", "Ciclo", "Curso", "Nota", "Estado"};
     
     public void HistoriaRevisar(){       
-        cerrarIntPanel();
-        in5 = new JInternalFrame();
+        ctrmain.cerrarIntPanel(intPanel);
+        JInternalFrame in5 = new JInternalFrame();
         in5.setBounds(-5,-30,1260, 860);
-        pa5 = new JPanel();
+        JPanel pa5 = new JPanel();
         pa5.setLayout(null);
         
         JLabel lblTitulo = new JLabel("Búsqueda de Historial Académico");
-        lblTitulo.setFont(titulo);
+        lblTitulo.setFont(r.arialXLB);
         lblTitulo.setBounds(500, 20, 500, 40);
-        pa3.add(lblTitulo);
+        pa5.add(lblTitulo);
         
-        btnVolver = new JButton("Volver");
-        btnVolver.setBounds(80, 660, 100, 30);
-        btnVolver.addActionListener((e) -> {
-            volver();
-        });
-        pa3.add(btnVolver);   
-
         lbl5BuscarId = new JLabel("Buscar por ID de Alumno:");
         lbl5BuscarId.setBounds(100, 100, 200, 30);
         pa5.add(lbl5BuscarId);
@@ -781,11 +677,15 @@ public class FrmPrincipal extends JFrame {
         btn5Limpiar.setBounds(500, 700, 150, 40);
         pa5.add(btn5Limpiar);
 
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBounds(80, 660, 100, 30);
+        pa5.add(btnVolver);
         
         in5.add(pa5);
         in5.setVisible(true);
         add(in5);
         intPanel = in5;
+        btnVolver.addActionListener(e -> ctrmain.volver(intPanel));    
     }
     //---PANEL 6: ---    
     public JLabel lbl6CodAlumno, lbl6Ciclo, lbl6Año, lbl6Carrera, lbl6Cursos;
@@ -794,24 +694,17 @@ public class FrmPrincipal extends JFrame {
     public JButton btn6Modificar, btn6Limpiar;
     public String[] carreras = {"Ingeniería de Sistemas", "Ingeniería de Transporte", "Ingeniería Industrial", "Ingeniería Agroindustrial"};
             
-    public void ModificarDatos(){       
-        cerrarIntPanel();
-        in6 = new JInternalFrame();
+    public void ModificarDatos(){   
+        ctrmain.cerrarIntPanel(intPanel);
+        JInternalFrame in6 = new JInternalFrame();
         in6.setBounds(-5,-30,1260, 860);
-        pa6 = new JPanel();
+        JPanel pa6 = new JPanel();
         pa6.setLayout(null);
         
         JLabel lblTitulo = new JLabel("Modificar Datos del Alumno");
-        lblTitulo.setFont(titulo);
+        lblTitulo.setFont(r.arialXLB);
         lblTitulo.setBounds(500, 20, 500, 40);
-        pa3.add(lblTitulo);
-        
-        btnVolver = new JButton("Volver");
-        btnVolver.setBounds(80, 660, 100, 30);
-        btnVolver.addActionListener((e) -> {
-            volver();
-        });
-        pa3.add(btnVolver);   
+        pa6.add(lblTitulo);
 
         lbl6CodAlumno = new JLabel("Código de Alumno:");
         lbl6CodAlumno.setBounds(100, 100, 200, 30);
@@ -861,10 +754,15 @@ public class FrmPrincipal extends JFrame {
         btn6Limpiar.setBounds(700, 400, 150, 40);
         pa6.add(btn6Limpiar);
         
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBounds(80, 660, 100, 30);
+        pa6.add(btnVolver);   
+        
         in6.add(pa6);
         in6.setVisible(true);
         add(in6);
         intPanel = in6;
+        btnVolver.addActionListener(e -> ctrmain.volver(intPanel));    
     }
     //---PANEL 7: ---    
     public JLabel lbl7CodAlumno, lbl7SelectRegistro;
@@ -876,24 +774,17 @@ public class FrmPrincipal extends JFrame {
     public String[] titu7tabla = {"Campo", "Valor"};
     public String[] tiposRegistro = {"Vouchers", "Historial Académico", "Matrícula"};
     
-    public void ImprimirDatos(){       
-        cerrarIntPanel();
-        in7 = new JInternalFrame();
+    public void ImprimirDatos(){    
+        ctrmain.cerrarIntPanel(intPanel);
+        JInternalFrame in7 = new JInternalFrame();
         in7.setBounds(-5,-30,1260, 860);
-        pa7 = new JPanel();
+        JPanel pa7 = new JPanel();
         pa7.setLayout(null);
         
         JLabel lblTitulo = new JLabel("Imprimir Datos del Alumno");
-        lblTitulo.setFont(titulo);
+        lblTitulo.setFont(r.arialXLB);
         lblTitulo.setBounds(500, 20, 500, 40);
-        pa3.add(lblTitulo);
-        
-        btnVolver = new JButton("Volver");
-        btnVolver.setBounds(80, 660, 100, 30);
-        btnVolver.addActionListener((e) -> {
-            volver();
-        });
-        pa3.add(btnVolver);   
+        pa7.add(lblTitulo);
 
         lbl7CodAlumno = new JLabel("Código de Alumno:");
         lbl7CodAlumno.setBounds(100, 100, 200, 30);
@@ -925,12 +816,15 @@ public class FrmPrincipal extends JFrame {
         btn7Limpiar.setBounds(500, 700, 150, 40);
         pa7.add(btn7Limpiar);
         
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBounds(80, 660, 100, 30);
+        pa7.add(btnVolver);  
         
         in7.add(pa7);
         in7.setVisible(true);
         add(in7);
         intPanel = in7;
-    }
- 
+        btnVolver.addActionListener(e -> ctrmain.volver(intPanel));
+    } 
 }
     

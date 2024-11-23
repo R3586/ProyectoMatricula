@@ -3,26 +3,29 @@ package controller;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import model.ModelMatricula;
-import view.FrmPrincipal;
+import model.ModelMatricula_std;
+import utilily.Recursos;
+import view.FrmPrincipal_std;
 
-public class CtrMatricula {
-    FrmPrincipal vista;
-    ModelMatricula modelo;
-
-    public CtrMatricula(FrmPrincipal vista) {
+public class CtrMatricula_std {
+    FrmPrincipal_std vista;
+    ModelMatricula_std modelo;
+    Recursos r;
+    public CtrMatricula_std(FrmPrincipal_std vista) {
         this.vista = vista;
-        modelo = new ModelMatricula();        
+        modelo = new ModelMatricula_std(); 
+        r = new Recursos();
     }
     
     public void buscarAlumno() {
-        String codigoAlumno = vista.txt2CodAlumno.getText();
-        String nombreAlumno = modelo.obtenerNombresAlumno(codigoAlumno);        
-        String apellidoAlumno = modelo.obtenerApellidosAlumno(codigoAlumno);
+        String codigoAlumno = r.CodUsuario;
+        String nombreAlumno = r.NomUsuario;     
+        String apellidoAlumno = r.ApeUsuario;
         String nombreCarrera = modelo.obtenerNombreCarrera(codigoAlumno);
         String nombreEscuela = modelo.obtenerNombreEscuela(codigoAlumno);
 
         if (nombreAlumno != null && nombreCarrera != null) {
+            vista.txt2CodAlumno.setText(codigoAlumno);
             vista.txt2Alumno.setText(apellidoAlumno + ", " + nombreAlumno);
             vista.txt2Carrera.setText(nombreCarrera);
             vista.txt2Escuela.setText(nombreEscuela);
@@ -32,6 +35,7 @@ public class CtrMatricula {
         } else {
             JOptionPane.showMessageDialog(null, "Alumno no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
     }
     
     public void cargarAños() {        

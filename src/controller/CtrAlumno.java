@@ -7,8 +7,8 @@ import model.ModelAlumno;
 import view.FrmPrincipal;
 
 public class CtrAlumno {
-    private final FrmPrincipal vista;
-    private final ModelAlumno modelo;
+    FrmPrincipal vista;
+    ModelAlumno modelo;
 
     public CtrAlumno(FrmPrincipal vista) {
         this.vista = vista;

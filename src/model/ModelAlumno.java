@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import utilily.ConexionBD;
 
 
@@ -102,7 +101,7 @@ public class ModelAlumno {
     ResultSet         rs = null;
     
     public boolean registrarAlumno(ModelAlumno alumno) {
-        String consulta = "INSERT INTO alumno (apellidos, nombres, id_carrera, DNI, direccion, usuario, id_alumno) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String consulta = "INSERT INTO alumno (apellidos, nombres, id_carrera, DNI, direccion, usuario, contraseña, id_alumno) VALUES (?, ?, ?, ?, ?, ?, NULL, ?)";
         return actualizarLista(consulta, alumno);
     }
         
